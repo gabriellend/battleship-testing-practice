@@ -18,6 +18,10 @@ export class Ship {
     this.#numHits++;
   }
 
+  get numHits() {
+    return this.#numHits;
+  }
+
   get isSunk() {
     return this.#length === this.#numHits;
   }
