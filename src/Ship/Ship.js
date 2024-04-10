@@ -25,4 +25,8 @@ export class Ship {
   get isSunk() {
     return this.#length === this.#numHits;
   }
+
+  get length() {
+    return this.#length;
+  }
 }
