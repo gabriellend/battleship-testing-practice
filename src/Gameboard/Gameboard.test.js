@@ -12,11 +12,16 @@ describe("Gameboard", () => {
     });
 
     test("can place ships at specific coords", () => {
-      board.placeShip(patrolBoat, [
+      const coords = [
         [0, 0],
         [0, 1],
-      ]);
-      expect();
+      ];
+      board.placeShip(patrolBoat, coords);
+
+      expect(board.ships).toContain(patrolBoat);
+      expect(() => board.checkCoordsAvailable(coords)).toThrow(
+        "Cannot place a ship on top of another ship."
+      );
     });
     test("throws an error if ship length does not match number of coords", () => {
       const calledWithTooManyCoords = () =>

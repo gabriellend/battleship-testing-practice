@@ -4,9 +4,11 @@ import { S } from "../constants";
 export class Gameboard {
   static BOARD_SIZE = 10;
   #board;
+  #ships;
 
   constructor() {
     this.#board = this.initialize();
+    this.#ships = [];
   }
 
   initialize() {
@@ -15,13 +17,11 @@ export class Gameboard {
       .map(() => Array(Gameboard.BOARD_SIZE).fill("~"));
   }
 
-  placeShip(ship, coords) {
-    if (ship.length !== coords.length) {
-      throw new Error("Ship length must match number of coordinates");
-    }
+  get ships() {
+    return this.#ships;
+  }
 
-    let boardCopy = this.#board.slice();
-
+  checkCoordsAvailable = (coords) => {
     for (const [row, col] of coords) {
       if (!this.#board[row][col]) {
         throw new Error("Coordinate is out of bounds");
@@ -32,8 +32,21 @@ export class Gameboard {
       }
     }
 
-    for (const [row, col] of coords) {
-      boardCopy[row][col] = S;
+    return true;
+  };
+
+  placeShip(ship, coords) {
+    if (ship.length !== coords.length) {
+      throw new Error("Ship length must match number of coordinates");
+    }
+
+    const areCoordsAvailable = this.checkCoordsAvailable(coords);
+    if (areCoordsAvailable) {
+      for (const [row, col] of coords) {
+        this.#board[row][col] = S;
+      }
+
+      this.#ships.push(ship);
     }
   }
 
