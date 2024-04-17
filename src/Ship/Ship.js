@@ -1,6 +1,8 @@
 export class Ship {
+  static #shipID = 0;
   #length;
   #numHits;
+  #id;
 
   constructor(length) {
     if (!Number.isInteger(length) || length <= 0) {
@@ -8,6 +10,7 @@ export class Ship {
     }
     this.#length = length;
     this.#numHits = 0;
+    this.#id = ++Ship.#shipID;
   }
 
   hit() {
@@ -28,5 +31,9 @@ export class Ship {
 
   get length() {
     return this.#length;
+  }
+
+  get id() {
+    return this.#id;
   }
 }

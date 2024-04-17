@@ -1,1 +1,2 @@
-export const S = "S";
+export const water = "~";
+export const hit = "H";

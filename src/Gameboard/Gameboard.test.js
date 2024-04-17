@@ -12,14 +12,20 @@ describe("Gameboard", () => {
     });
 
     test("can place ships at specific coords", () => {
-      const coords = [
+      const firstBoatCoords = [
         [0, 0],
         [0, 1],
       ];
-      board.placeShip(patrolBoat, coords);
-
+      board.placeShip(patrolBoat, firstBoatCoords);
       expect(board.ships).toContain(patrolBoat);
-      expect(() => board.checkCoordsAvailable(coords)).toThrow(
+
+      const secondBoatCoords = [
+        [0, 1],
+        [0, 2],
+        [0, 3],
+      ];
+      const submarine = new Ship(3);
+      expect(() => board.placeShip(submarine, secondBoatCoords)).toThrow(
         "Cannot place a ship on top of another ship."
       );
     });
@@ -61,5 +67,37 @@ describe("Gameboard", () => {
     });
   });
 
-  describe("receiveAttack", () => {});
+  describe("receiveAttack", () => {
+    let board;
+    let patrolBoat;
+    const boatCoords = [
+      [0, 0],
+      [0, 1],
+    ];
+
+    beforeEach(() => {
+      patrolBoat = new Ship(2);
+      board = new Gameboard();
+    });
+
+    test("returns true if there is a hit", () => {
+      const attackCoords = [0, 0];
+      board.placeShip(patrolBoat, boatCoords);
+      expect(board.receiveAttack(attackCoords)).toBe(true);
+    });
+    test("returns false if there is a miss", () => {
+      const attackCoords = [0, 2];
+      board.placeShip(patrolBoat, boatCoords);
+      expect(board.receiveAttack(attackCoords)).toBe(false);
+    });
+    test("throws an error if a ship is already hit", () => {
+      const attack1Coords = [0, 0];
+      const attack2Coords = [0, 1];
+
+      board.placeShip(patrolBoat, boatCoords);
+      board.receiveAttack(attack1Coords);
+      board.receiveAttack(attack2Coords);
+      expect(() => board.receiveAttack(attack1Coords)).toThrow();
+    });
+  });
 });
